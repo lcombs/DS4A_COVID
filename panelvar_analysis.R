@@ -6,11 +6,28 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 path <- getwd()
 
 ###Load the data 
-data <- read.csv(file=paste(path,'/data/all_data_clean.csv', sep = ''), header=TRUE, sep=",")
+data <- read.csv(file=paste(path,'/all_data_weekly.csv', sep = ''), header=TRUE, sep=",")
+states <- c('Alabama', 'Colorado', 'Indiana', 'Minnesota', 'Wisconsin')
+test = c(sapply(states, function(x) which(data$state == x)))
+temp_data_sub = data[test,]
+
+###make a panel dataframe
+sub_data <- pdata.frame(temp_data_sub, index=c("state"), drop.index=TRUE, row.names=TRUE)
+heading = colnames(sub_data[5:11])
+sub_data$building_percentage = lag(sub_data$building_percentage,2)
+sub_data$grocery_and_pharmacy_percent_change_from_baseline = lag(sub_data$grocery_and_pharmacy_percent_change_from_baseline,2)
+sub_data$transit_stations_percent_change_from_baseline = lag(sub_data$transit_stations_percent_change_from_baseline,2)
+sub_data$retail_and_recreation_percent_change_from_baseline = lag(sub_data$retail_and_recreation_percent_change_from_baseline,2)
+sub_data$parks_percent_change_from_baseline = lag(sub_data$parks_percent_change_from_baseline,2)
+sub_data$workplaces_percent_change_from_baseline = lag(sub_data$workplaces_percent_change_from_baseline,2)
+sub_data$residential_percent_change_from_baseline = lag(sub_data$residential_percent_change_from_baseline,2)
+
+test <- plm(new_cases~grocery_and_pharmacy_percent_change_from_baseline, data = sub_data, model = "within")
 
 data("Dahlberg")
 summary(Dahlberg)
 plot.ts(Dahlberg[which(Dahlberg$id==114),3:5]) #plot the expenditure, revenue, and grants for a single country in the Dalberg dataset. Looks like we have co-integration but not stationarity?
+
 
 
 help(pvargmm)
