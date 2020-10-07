@@ -7,14 +7,8 @@ from plotly.subplots import make_subplots
 
 
 # PLOT SETTINGS: which plot do you want to see?
-buildings_on = 1
-corona_on = 1
-workplaces_on = 0
-retail_rec_on = 0
-grocery_on = 0
-parks_on = 0
-transit_on = 0
-res_on = 0
+# list = ['rona', 'buildings', 'workplace', 'retail', 'grocery', 'parks', 'transit', 'res']
+list = ['rona', 'buildings']
 
 # read in data
 df = pd.read_csv("all_data_weekly.csv")
@@ -37,21 +31,21 @@ rona = px.line(df, x="week_start", y="new_cases", color="state")
 rona.update_traces(yaxis="y2")
 
 # selects which traces you want
-if not buildings_on:
+if 'buildings' not in list:
     buildings.data = []
-if not corona_on:
+if 'rona' not in list:
     rona.data = []
-if not workplaces_on:
+if 'workplace' not in list:
     workplace.data = []
-if not retail_rec_on:
+if 'retail' not in list:
     rec.data = []
-if not grocery_on:
+if 'grocery' not in list:
     groc.data = []
-if not parks_on:
+if 'parks' not in list:
     park.data = []
-if not transit_on:
+if 'transit' not in list:
     transit.data = []
-if not res_on:
+if 'res' not in list:
     res.data = []
 
 subfig2.add_traces(buildings.data + rona.data + workplace.data + rec.data + groc.data + park.data + transit.data + res.data)
