@@ -34,16 +34,16 @@ for(i in 1:7){ #this loop plots the ccf plot for all variables. click the left a
 
 ccf(x,y, type = 'correlation')
 ###make a panel dataframe
-sub_data <- pdata.frame(temp_data_sub, index=c("state"), drop.index=TRUE, row.names=TRUE)
-
+sub_data <- pdata.frame(temp_data_sub, index=c("state","week_start"), drop.index=TRUE, row.names=TRUE)
+View(sub_data)
 #change the lag to what your ccf plots say for all the variables below:
-sub_data$building_percentage = lag(sub_data$building_percentage,4)
-sub_data$grocery_and_pharmacy_percent_change_from_baseline = lag(sub_data$grocery_and_pharmacy_percent_change_from_baseline,3)
-sub_data$transit_stations_percent_change_from_baseline = lag(sub_data$transit_stations_percent_change_from_baseline,3)
-sub_data$retail_and_recreation_percent_change_from_baseline = lag(sub_data$retail_and_recreation_percent_change_from_baseline,3)
-sub_data$parks_percent_change_from_baseline = lag(sub_data$parks_percent_change_from_baseline,0)
-sub_data$workplaces_percent_change_from_baseline = lag(sub_data$workplaces_percent_change_from_baseline,4)
-sub_data$residential_percent_change_from_baseline = lag(sub_data$residential_percent_change_from_baseline,4)
+sub_data$building_percentage = plm::lag(sub_data$building_percentage,4)
+sub_data$grocery_and_pharmacy_percent_change_from_baseline = plm::lag(sub_data$grocery_and_pharmacy_percent_change_from_baseline,3)
+sub_data$transit_stations_percent_change_from_baseline = plm::lag(sub_data$transit_stations_percent_change_from_baseline,3)
+sub_data$retail_and_recreation_percent_change_from_baseline = plm::lag(sub_data$retail_and_recreation_percent_change_from_baseline,3)
+sub_data$parks_percent_change_from_baseline = plm::lag(sub_data$parks_percent_change_from_baseline,0)
+sub_data$workplaces_percent_change_from_baseline = plm::lag(sub_data$workplaces_percent_change_from_baseline,4)
+sub_data$residential_percent_change_from_baseline = plm::lag(sub_data$residential_percent_change_from_baseline,4)
 
 #runs a pooled OLS fixed effects model. Change model to 'within' for a regular fixed effect
 simple <- plm(new_cases_scaled~
